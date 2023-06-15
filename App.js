@@ -1,20 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
+import React from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import AppNav from "./src/navigation/AppNav";
+import { GlobalProvider, useGlobalContext } from "./src/context/GlobalContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function App() {
+  const { isLogged, setIsLogged } = useGlobalContext;
+  const isLoggedIn = async () => {
+    try {
+      const flag = await AsyncStorage.getItem("userAccess");
+      if (flag !== null) {
+        setIsLogged(true);
+      }
+    } catch (error) {
+      setIsLogged(false);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GlobalProvider>
+        <SafeAreaProvider>
+          <AppNav />
+        </SafeAreaProvider>
+    </GlobalProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
