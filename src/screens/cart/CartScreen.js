@@ -4,26 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { get, remove } from "../../services/WebServices";
+import { useGlobalContext } from "../../context/GlobalContext";
 const CartScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
-    const navigateToCheckOut = () => {
-        navigation.navigate('CheckOutScreen');
-    }
-    const removeItem = async (id) => {
-        const response = await remove("cart/remove/" + id);
-        if (response?.status) {
-            const newData = cartData.filter((item) => item.cartId != id);
-            setCartData(newData);
-        }
-    }
-    const [cartData, setCartData] = useState();
-    const getCartData = async () => {
-        const data = await get('cart/get/9874563210');
-        setCartData(data);
-    }
+    const { cartData, setCartData, navigateToCheckOut, removeItem, getCartData } = useGlobalContext();
     useEffect(() => {
         getCartData();
-    }, [])
+    }, []);
     if (cartData) {
         return (
             <View

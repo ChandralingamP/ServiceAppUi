@@ -7,6 +7,7 @@ import { get, post, remove, put } from "../services/WebServices";
 const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
   const insets = useSafeAreaInsets();
+  const tester = "hi";
   const [customerId, setCustomerId] = useState("");
   const [isLogged, setIsLogged] = useState(false);
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");
@@ -94,22 +95,70 @@ export const GlobalProvider = ({ children }) => {
 
   // context for services
 
-  const [serviceData, setServiceData] = useState("null");
-  const getServiceData = async () => {
+  const [serviceData, setServiceData] = useState("");
+  const [SSSFlag, setSSSFlag] = useState(false);
+  const [serviceInCartFlag, setServiceInCartFlag] = useState(false);
+  const getAllServiceData = async () => {
     const data = await get("services/details");
     setServiceData(data);
+  };
+  const addToCart = async (service) => {
+    try {
+      const result = await post("cart/add", {
+        customerPhoneNumber: "9874563210",
+        serviceId: service.serviceId,
+      });
+      if (result.status == true) {
+        setCartData([...cartData, service]);
+        setServiceInCartFlag(true);
+      } else {
+        setServiceInCartFlag(false)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getServiceData = async (ServiceId) => {
+    try {
+      const data = await get("services/details/service/" + ServiceId + "/9874563210");
+      setServiceData(data);
+      if (serviceData.status == true) {
+        setServiceInCartFlag(true);
+      } else {
+        setServiceInCartFlag(false);
+      }
+      setSSSFlag(true);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
 
 
+
   // Cart
-  const fuck = 'you';
+  const [cartData, setCartData] = useState();
+  const navigateToCheckOut = () => {
+    navigation.navigate('CheckOutScreen');
+  }
+  const removeItem = async (id) => {
+    const response = await remove("cart/remove/" + id);
+    if (response?.status) {
+      const newData = cartData.filter((item) => item.cartId != id);
+      setCartData(newData);
+    }
+  }
+
+  const getCartData = async () => {
+    const data = await get('cart/get/9874563210');
+    setCartData(data);
+  }
 
   return (
     <GlobalContext.Provider
       value={{
         insets,
-
+        tester,
         customerPhoneNumber,
         isLogged,
         login,
@@ -118,10 +167,20 @@ export const GlobalProvider = ({ children }) => {
         setIsLogged,
         otpVerify,
         updateCustomerDetails,
+        getServiceData,
+        getAllServiceData,
+        cartData,
+        setCartData,
+        navigateToCheckOut,
+        removeItem,
+        getCartData,
         serviceData,
         setServiceData,
-        getServiceData,
-        fuck
+        SSSFlag,
+        setSSSFlag,
+        serviceInCartFlag,
+        setServiceInCartFlag,
+        addToCart
       }}
     >
       {children}

@@ -1,14 +1,16 @@
 import { View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { get } from "../services/WebServices";
-import { ServiceCard } from "../components/SingleServiceCard";
+import { get } from "../../services/WebServices";
+import { ServiceCard } from "../../components/SingleServiceCard";
+import { useGlobalContext } from "../../context/GlobalContext";
 const ServiceCategoryScreen = ({ navigation, route }) => {
   const insets = useSafeAreaInsets();
+  const { tester } = useGlobalContext();
   const [category, setCategory] = useState("AC");
   const [flag, setFlag] = useState(false);
   const [serviceCategoryData, setServiceCategoryData] = useState("");
-  const getServiceData = async (category) => {
+  const getServiceCategoryData = async (category) => {
     try {
       const data = await get("services/details/" + category);
       setServiceCategoryData(data);
@@ -27,7 +29,7 @@ const ServiceCategoryScreen = ({ navigation, route }) => {
     if (category) {
       if (cat) {
         if (category == cat) {
-          getServiceData(category);
+          getServiceCategoryData(category);
         } else {
           setCategory(route?.params?.category);
         }
@@ -84,7 +86,7 @@ const ServiceCategoryScreen = ({ navigation, route }) => {
   } else {
     return (
       <View>
-        <Text>Loading</Text>
+        <Text>Loading {tester}</Text>
       </View>
     );
   }

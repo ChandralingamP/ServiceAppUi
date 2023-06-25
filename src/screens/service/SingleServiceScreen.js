@@ -5,51 +5,22 @@ import {
   ScrollView,
   Image,
   Pressable,
-  Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { get, post } from "../services/WebServices";
+import React, { useEffect,useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useGlobalContext } from "../../context/GlobalContext";
 const SingleServiceScreen = ({ navigation, route }) => {
   const insets = useSafeAreaInsets();
+  const { tester, serviceData,
+    SSSFlag,
+    getServiceData,
+    setSSSFlag,
+    serviceInCartFlag,
+    addToCart } = useGlobalContext();
   const [serviceId, setServiceId] = useState("AC");
-  const [flag, setFlag] = useState(false);
-  const [serviceData, setServiceData] = useState("");
-  const [cartFlag, setCartFlag] = useState(false);
-  const addToCart = async (id) => {
-    try {
-      const result = await post("cart/add", {
-        customerPhoneNumber: "9874563210",
-        serviceId: id,
-      });
-      console.log(result.status + "ag");
-      if (result.status == true) {
-        setCartFlag(true);
-        console.log(cartFlag);
-      } else {
-        setCartFlag(false)
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const getServiceData = async (ServiceId) => {
-    try {
-      const data = await get("services/details/service/" + ServiceId + "/9874563210");
-      setServiceData(data);
-      if (serviceData.status == true) {
-        setCartFlag(true);
-      } else {
-        setCartFlag(false);
-      }
-      setFlag(true);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   const cat = route?.params?.serviceId;
   useEffect(() => {
-    setFlag(false);
+    setSSSFlag(false);
     if (serviceId) {
       if (cat) {
         if (serviceId == cat) {
@@ -62,7 +33,9 @@ const SingleServiceScreen = ({ navigation, route }) => {
       setServiceId(route?.serviceId);
     }
   }, [serviceId, cat]);
-  if (flag) {
+
+
+  if (SSSFlag) {
     return (
       <View
         style={{
@@ -76,7 +49,7 @@ const SingleServiceScreen = ({ navigation, route }) => {
         }}
       >
         <ScrollView>
-          <ServiceCard flag={serviceData.status} service={serviceData?.service} addToCart={addToCart} />
+          <ServiceCard flag={serviceInCartFlag} service={serviceData?.service} addToCart={addToCart} />
           <Text style={{ fontSize: 25, fontWeight: "bold", paddingLeft: 10 }}>
             Related Service
           </Text>
@@ -97,7 +70,7 @@ const SingleServiceScreen = ({ navigation, route }) => {
   } else {
     return (
       <View>
-        <Text>Loading</Text>
+        <Text>Loading {tester}</Text>
       </View>
     );
   }
@@ -127,7 +100,7 @@ const ServiceCard = ({ service, addToCart, flag }) => {
       </View>
       <View style={{ width: "33%" }}>
         <Image
-          source={require("../assets/Ac.jpg")}
+          source={require("../../assets/Ac.jpg")}
           style={{ width: "100%", height: 120, marginTop: 10 }}
         ></Image>
       </View>
@@ -147,7 +120,7 @@ const ButtonCard = ({ service, flag, addToCart }) => {
           display: "flex",
           alignItems: "center",
         }}
-        onPress={() => addToCart(service.serviceId)}
+        onPress={() => addToCart(service)}
       >
         <Text
           style={{
@@ -171,7 +144,7 @@ const ButtonCard = ({ service, flag, addToCart }) => {
           display: "flex",
           alignItems: "center",
         }}
-        onPress={() => addToCart(service.serviceId)}
+        onPress={() => addToCart(service)}
       >
         <Text
           style={{
@@ -189,7 +162,6 @@ const ButtonCard = ({ service, flag, addToCart }) => {
 
 
 const RelatedServiceCard = ({ service, getServiceData }) => {
-  // const ServiceCard = ({ service, NavTo }) => {
   return (
     <Pressable
       onPress={() => getServiceData(service.serviceId)}
@@ -206,7 +178,7 @@ const RelatedServiceCard = ({ service, getServiceData }) => {
       }}
     >
       <Image
-        source={require("../assets/Ac.jpg")}
+        source={require("../../assets/Ac.jpg")}
         style={{ width: "90%", height: 100, alignItems: "center" }}
       ></Image>
       <Text style={{ textAlign: "center", fontWeight: 600 }}>

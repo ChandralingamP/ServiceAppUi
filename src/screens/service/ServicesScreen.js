@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useGlobalContext } from "../context/GlobalContext";
+import { useGlobalContext } from "../../context/GlobalContext";
 export default function ServiceScreen({ navigation }) {
-  const NavTo = (screen,params) => {
-    console.log(screen,{serviceId : params});
-    navigation.navigate(screen,{serviceId : params});
+  const NavTo = (screen, params) => {
+    console.log(screen, { serviceId: params });
+    navigation.navigate(screen, { serviceId: params });
   };
   const NavToCategory = (type) => {
     console.log(type);
@@ -22,23 +22,24 @@ export default function ServiceScreen({ navigation }) {
     });
   };
   const insets = useSafeAreaInsets();
-  const { getServiceData, serviceData } = useGlobalContext();
+  const { getAllServiceData, serviceData, tester } = useGlobalContext();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    if (serviceData == "null") {
-      getServiceData();
+    console.log(serviceData, "kjdf");
+    if (serviceData) {
       setIsLoading(true);
-      console.log(serviceData);
+    } else {
+      getAllServiceData();
     }
     console.log("hi");
   }, [serviceData]);
-  let im = "Ac.jpg";
   if (isLoading == false) {
     return (
       <View
         style={{
           flex: 1,
           justifyContent: "center",
+          alignItems: "center",
           marginTop: insets.top,
           marginBottom: insets.bottom,
           marginLeft: insets.left,
@@ -68,7 +69,7 @@ export default function ServiceScreen({ navigation }) {
             fontWeight: "bold",
           }}
         >
-          Services
+          Services {tester}
         </Text>
         <ScrollView style={{ marginHorizontal: "3%" }}>
           <View>
@@ -100,7 +101,7 @@ export default function ServiceScreen({ navigation }) {
                   <ServiceCard
                     key={service.serviceId}
                     NavTo={NavTo}
-                    image={require("../assets/" + "Ac.jpg")}
+                    image={require("../../assets/" + "Ac.jpg")}
                     service={service}
                   ></ServiceCard>
                 );
@@ -139,7 +140,7 @@ export default function ServiceScreen({ navigation }) {
                     key={key}
                     NavTo={NavTo}
                     service={service}
-                    image={require("../assets/" + "electrical.jpg")}
+                    image={require("../../assets/" + "electrical.jpg")}
                   ></ServiceCard>
                 );
               })}
@@ -173,7 +174,7 @@ export default function ServiceScreen({ navigation }) {
             <View style={styles.box}>
               {serviceData?.PlumbingServices?.map((service, key) => {
                 let imgPath =
-                  "../assets/" + service != null
+                  "../../assets/" + service != null
                     ? service?.serviceImagefile
                     : "electrical.jpg";
                 console.log(imgPath);
@@ -182,7 +183,7 @@ export default function ServiceScreen({ navigation }) {
                     key={service.serviceId}
                     NavTo={NavTo}
                     service={service}
-                    image={require("../assets/" + "plumbing.jpg")}
+                    image={require("../../assets/" + "plumbing.jpg")}
                   ></ServiceCard>
                 );
               })}
@@ -197,7 +198,7 @@ export default function ServiceScreen({ navigation }) {
 const ServiceCard = ({ service, NavTo, image }) => {
   const navigateTo = () => {
     console.log((service.serviceId));
-    NavTo("SingleServiceScreen",service.serviceId);
+    NavTo("SingleServiceScreen", service.serviceId);
   };
   return (
     <Pressable
