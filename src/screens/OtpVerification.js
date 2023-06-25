@@ -2,14 +2,13 @@ import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useGlobalContext } from "../context/GlobalContext";
 import { useState } from "react";
-const OtpVerification = ({navigation}) => {
-  const [otp,setOtp] = useState();
+const OtpVerification = ({ navigation, route }) => {
+  const [otp, setOtp] = useState();
   const { otpVerify } = useGlobalContext();
   const insets = useSafeAreaInsets();
   const onSubmit = () => {
-    // console.log(otp);
-    otpVerify(otp,navigation);
-    // navigation.navigate("CustomerDetails");
+    const screen = route.navScreen;
+    otpVerify(otp, navigation, screen);
   };
   return (
     <View

@@ -17,10 +17,10 @@ export default function App() {
   };
 
   return (
-    <GlobalProvider>
-        <SafeAreaProvider>
-          <AppNav />
-        </SafeAreaProvider>
-    </GlobalProvider>
+    <SafeAreaProvider>
+      <GlobalProvider>
+        <AppNav />
+      </GlobalProvider>
+    </SafeAreaProvider>
   );
 }

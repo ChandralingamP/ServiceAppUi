@@ -5,15 +5,16 @@ const ServiceContext = createContext();
 
 export const ServiceProvider = ({ children }) => {
   const [serviceData, setServiceData] = useState();
-  
 
   const getServiceData = async () => {
     const data = await get("services/details");
     setServiceData(data);
   };
+  const hi = "Hello ";
   return (
     <ServiceContext.Provider
       value={{
+        hi,
         serviceData,
         setServiceData,
         getServiceData,

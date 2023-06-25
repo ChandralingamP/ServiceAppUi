@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const root_url = "http://192.168.1.3:5000/";
+const root_url = "http://192.168.87.64:5000/";
 
 export async function get(url) {
   return await axios

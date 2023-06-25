@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { services } from "../utils/Services";
 export default function HomeScreen({ navigation }) {
   const NavTo = (type) => {
-    console.log(type);
     navigation.navigate("ServiceStack", {
       screen: "ServiceCategoryScreen",
       params: { category: type },

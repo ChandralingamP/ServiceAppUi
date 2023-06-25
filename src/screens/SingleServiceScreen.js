@@ -22,10 +22,12 @@ const SingleServiceScreen = ({ navigation, route }) => {
         customerPhoneNumber: "9874563210",
         serviceId: id,
       });
-      if (result.status) {
-        setCartFlag(result.status);
-        Alert.alert("Added");
+      console.log(result.status + "ag");
+      if (result.status == true) {
+        setCartFlag(true);
         console.log(cartFlag);
+      } else {
+        setCartFlag(false)
       }
     } catch (err) {
       console.log(err);
@@ -33,8 +35,13 @@ const SingleServiceScreen = ({ navigation, route }) => {
   };
   const getServiceData = async (ServiceId) => {
     try {
-      const data = await get("services/details/service/" + ServiceId);
+      const data = await get("services/details/service/" + ServiceId + "/9874563210");
       setServiceData(data);
+      if (serviceData.status == true) {
+        setCartFlag(true);
+      } else {
+        setCartFlag(false);
+      }
       setFlag(true);
     } catch (err) {
       console.log(err);
@@ -69,12 +76,12 @@ const SingleServiceScreen = ({ navigation, route }) => {
         }}
       >
         <ScrollView>
-          <ServiceCard service={serviceData?.service} addToCart={addToCart} />
+          <ServiceCard flag={serviceData.status} service={serviceData?.service} addToCart={addToCart} />
           <Text style={{ fontSize: 25, fontWeight: "bold", paddingLeft: 10 }}>
             Related Service
           </Text>
           <View style={styles.box}>
-            {serviceData?.relatedServices.map((service) => {
+            {serviceData?.relatedServices?.map((service) => {
               return (
                 <RelatedServiceCard
                   key={service.serviceId}
@@ -95,7 +102,7 @@ const SingleServiceScreen = ({ navigation, route }) => {
     );
   }
 };
-const ServiceCard = ({ service, addToCart }) => {
+const ServiceCard = ({ service, addToCart, flag }) => {
   return (
     <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
       <View style={{ width: "67%" }}>
@@ -115,27 +122,7 @@ const ServiceCard = ({ service, addToCart }) => {
             alignItems: "center",
           }}
         >
-          <Pressable
-            style={{
-              height: 26,
-              width: "50%",
-              backgroundColor: "gray",
-              display: "flex",
-              alignItems: "center",
-            }}
-            onPress={() => addToCart(service.serviceId)}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                padding: 2,
-                fontWeight: 500,
-                color: "white",
-              }}
-            >
-              Add to Cart
-            </Text>
-          </Pressable>
+          <ButtonCard flag={flag} service={service} addToCart={addToCart} />
         </View>
       </View>
       <View style={{ width: "33%" }}>
@@ -147,6 +134,60 @@ const ServiceCard = ({ service, addToCart }) => {
     </View>
   );
 };
+
+const ButtonCard = ({ service, flag, addToCart }) => {
+  console.log(flag);
+  if (flag == true) {
+    return (
+      <Pressable
+        style={{
+          height: 26,
+          width: "50%",
+          backgroundColor: "gray",
+          display: "flex",
+          alignItems: "center",
+        }}
+        onPress={() => addToCart(service.serviceId)}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            padding: 2,
+            fontWeight: 500,
+            color: "white",
+          }}
+        >
+          Check Out
+        </Text>
+      </Pressable>
+    )
+  } else {
+    return (
+      <Pressable
+        style={{
+          height: 26,
+          width: "50%",
+          backgroundColor: "gray",
+          display: "flex",
+          alignItems: "center",
+        }}
+        onPress={() => addToCart(service.serviceId)}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            padding: 2,
+            fontWeight: 500,
+            color: "white",
+          }}
+        >
+          Add to Cart
+        </Text>
+      </Pressable>)
+  }
+}
+
+
 const RelatedServiceCard = ({ service, getServiceData }) => {
   // const ServiceCard = ({ service, NavTo }) => {
   return (

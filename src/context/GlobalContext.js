@@ -2,29 +2,27 @@ import { createContext, useContext, useState } from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { saveData } from "./Storage";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { get, post, remove, put } from "../services/WebServices";
 const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
+  const insets = useSafeAreaInsets();
   const [customerId, setCustomerId] = useState("");
   const [isLogged, setIsLogged] = useState(false);
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");
 
-  const login = async (customerPassword, navigation) => {
+  const login = async (customerPassword, navigation, screen) => {
     if (validatePhoneNumber(customerPhoneNumber)) {
       saveData("customerPhoneNumber", customerPhoneNumber);
       if (customerPassword == "") {
         Alert.alert("Enter Password");
       }
       try {
-        console.log(
-          `customer/login/${customerPhoneNumber}/${customerPassword}`
-        );
         const data = await get(
           `customer/login/${customerPhoneNumber}/${customerPassword}`
         );
-        console.log(data);
         if (data.msg) {
-          navigation.replace("LandingStack");
+          navigation.replace("LandingStack", { navScreen: screen });
         } else {
           Alert.alert("Invalid phoneNumber / Password");
           return;
@@ -72,11 +70,11 @@ export const GlobalProvider = ({ children }) => {
       return false;
     }
   }
-  const otpVerify = async (data, navigation) => {
+  const otpVerify = async (data, navigation, screen) => {
     const value = await AsyncStorage.getItem("otp");
     console.log(data + "  " + value);
     if (data == value) {
-      navigation.navigate("CustomerDetails");
+      navigation.navigate(screen);
       return true;
     } else {
       Alert.alert("Enter correct Opt");
@@ -101,11 +99,17 @@ export const GlobalProvider = ({ children }) => {
     const data = await get("services/details");
     setServiceData(data);
   };
-  
+
+
+
+  // Cart
+  const fuck = 'you';
 
   return (
     <GlobalContext.Provider
       value={{
+        insets,
+
         customerPhoneNumber,
         isLogged,
         login,
@@ -117,6 +121,7 @@ export const GlobalProvider = ({ children }) => {
         serviceData,
         setServiceData,
         getServiceData,
+        fuck
       }}
     >
       {children}

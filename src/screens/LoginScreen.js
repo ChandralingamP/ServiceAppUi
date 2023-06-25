@@ -1,12 +1,5 @@
-
 import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Pressable,
-} from "react-native";
+import { StyleSheet, Text, TextInput, View, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useGlobalContext } from "../context/GlobalContext";
 export default function LoginScreen({ navigation }) {
@@ -14,8 +7,7 @@ export default function LoginScreen({ navigation }) {
   const [customerPassword, setCustomerPassword] = useState("");
   const { login, setCustomerPhoneNumber } = useGlobalContext();
   const onSubmit = () => {
-    login(customerPassword,navigation);
-    // navigation.replace("LandingStack");
+    login(customerPassword, navigation, "CustomerDetails");
   };
   const Navto = (screen) => {
     navigation.navigate(screen);
@@ -59,7 +51,7 @@ export default function LoginScreen({ navigation }) {
           placeholder="Password"
         />
         <Pressable
-          onPress={()=>onSubmit()}
+          onPress={() => onSubmit()}
           style={{ paddingTop: 15, paddingBottom: 8 }}
         >
           <Text
@@ -78,10 +70,13 @@ export default function LoginScreen({ navigation }) {
           </Text>
         </Pressable>
       </View>
-      <Pressable style={{ paddingTop: 15, paddingBottom: 8 }}>
+      <Pressable
+        onPress={() => Navto("ForgotPassword")}
+        style={{ paddingTop: 15, paddingBottom: 8 }}
+      >
         <Text style={{ fontSize: 16, color: "blue" }}>Forgot Password ?</Text>
       </Pressable>
-      <Pressable onPress={()=>Navto('Register')} style={{ padding: 5 }}>
+      <Pressable onPress={() => Navto("Register")} style={{ padding: 5 }}>
         <Text style={{ fontSize: 16, color: "blue" }}>Create New account</Text>
       </Pressable>
     </View>
