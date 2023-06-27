@@ -13,7 +13,6 @@ const Register = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const onSubmit = () => {
     register(navigation);
-    // console.log(customerPhoneNumber);
   };
   return (
     <View

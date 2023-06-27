@@ -3,7 +3,6 @@ import { Pressable,Image,Text } from "react-native";
 
 
 export const ServiceCard = ({ service, NavTo }) => {
-  console.log(service);
   return (
     <Pressable
       onPress={() => NavTo(service.type)}

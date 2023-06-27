@@ -12,11 +12,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalContext";
 export default function ServiceScreen({ navigation }) {
   const NavTo = (screen, params) => {
-    console.log(screen, { serviceId: params });
     navigation.navigate(screen, { serviceId: params });
   };
   const NavToCategory = (type) => {
-    console.log(type);
     navigation.navigate("ServiceCategoryScreen", {
       category: type,
     });
@@ -25,13 +23,11 @@ export default function ServiceScreen({ navigation }) {
   const { getAllServiceData, serviceData, tester } = useGlobalContext();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    console.log(serviceData, "kjdf");
     if (serviceData) {
       setIsLoading(true);
     } else {
       getAllServiceData();
     }
-    console.log("hi");
   }, [serviceData]);
   if (isLoading == false) {
     return (
@@ -177,7 +173,6 @@ export default function ServiceScreen({ navigation }) {
                   "../../assets/" + service != null
                     ? service?.serviceImagefile
                     : "electrical.jpg";
-                console.log(imgPath);
                 return (
                   <ServiceCard
                     key={service.serviceId}
@@ -197,7 +192,6 @@ export default function ServiceScreen({ navigation }) {
 
 const ServiceCard = ({ service, NavTo, image }) => {
   const navigateTo = () => {
-    console.log((service.serviceId));
     NavTo("SingleServiceScreen", service.serviceId);
   };
   return (
@@ -225,6 +219,9 @@ const ServiceCard = ({ service, NavTo, image }) => {
     </Pressable>
   );
 };
+
+
+
 const styles = StyleSheet.create({
   input: {
     height: 35,

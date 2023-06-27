@@ -2,15 +2,12 @@ import React, { useEffect } from "react";
 import AuthStack from "./AuthStack";
 import LandingStack from "./LandingStack";
 import { NavigationContainer } from "@react-navigation/native";
+import { useGlobalContext } from "../context/GlobalContext";
 const AppNav = () => {
-  const getData = () => {};
-  useEffect(() => {
-    getData;
-  }, []);
+  const { userToken } = useGlobalContext();
   return (
     <NavigationContainer>
-      {/* <AuthStack/> */}
-      <LandingStack />
+      {userToken !== null ? <LandingStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };

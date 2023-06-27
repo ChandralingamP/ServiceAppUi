@@ -3,6 +3,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppNav from "./src/navigation/AppNav";
 import { GlobalProvider, useGlobalContext } from "./src/context/GlobalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthProvider } from "./src/context/AuthContext";
 export default function App() {
   const { isLogged, setIsLogged } = useGlobalContext;
   const isLoggedIn = async () => {

@@ -4,15 +4,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { saveData } from "./Storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { get, post, remove, put } from "../services/WebServices";
+import { useAuthContext } from "./AuthContext";
+
 const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
-  const insets = useSafeAreaInsets();
+  const [userToken, setUserToken] = useState(null);
+  const loginAuth = (token) => {
+    setUserToken(token);
+  }
+  const logoutAuth = () => {
+    setUserToken(null);
+  }
   const tester = "hi";
   const [customerId, setCustomerId] = useState("");
   const [isLogged, setIsLogged] = useState(false);
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");
 
   const login = async (customerPassword, navigation, screen) => {
+
     if (validatePhoneNumber(customerPhoneNumber)) {
       saveData("customerPhoneNumber", customerPhoneNumber);
       if (customerPassword == "") {
@@ -23,7 +32,8 @@ export const GlobalProvider = ({ children }) => {
           `customer/login/${customerPhoneNumber}/${customerPassword}`
         );
         if (data.msg) {
-          navigation.replace("LandingStack", { navScreen: screen });
+          loginAuth(customerPhoneNumber);
+          // navigation.replace("LandingStack", { navScreen: screen });
         } else {
           Alert.alert("Invalid phoneNumber / Password");
           return;
@@ -57,13 +67,11 @@ export const GlobalProvider = ({ children }) => {
       Alert.alert("Enter Mobile Number");
       return;
     } else {
-      console.log(customerPhoneNumber);
       Alert.alert("Enter Correct Mobile Number");
       return;
     }
   };
   function validatePhoneNumber(customerPhoneNumber) {
-    console.log("hi");
     var regexPattern = /^[0-9]{10}$/;
     if (regexPattern.test(customerPhoneNumber)) {
       return true;
@@ -73,7 +81,6 @@ export const GlobalProvider = ({ children }) => {
   }
   const otpVerify = async (data, navigation, screen) => {
     const value = await AsyncStorage.getItem("otp");
-    console.log(data + "  " + value);
     if (data == value) {
       navigation.navigate(screen);
       return true;
@@ -157,7 +164,8 @@ export const GlobalProvider = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
-        insets,
+        userToken,
+        logoutAuth,
         tester,
         customerPhoneNumber,
         isLogged,

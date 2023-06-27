@@ -23,7 +23,6 @@ const ServiceCategoryScreen = ({ navigation, route }) => {
     navigation.navigate('SingleServiceScreen',{serviceId : params});
   };
   const cat = route?.params?.category;
-  console.log(cat);
   useEffect(() => {
     setFlag(false);
     if (category) {

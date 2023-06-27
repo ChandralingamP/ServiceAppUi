@@ -11,14 +11,16 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { FontAwesome } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useServiceContext } from "../../context/ServiceContext";
+import { useGlobalContext } from "../../context/GlobalContext";
 export default function ProfileScreen({ navigation }) {
+  const { logoutAuth } = useGlobalContext();
   const { hi } = useServiceContext;
   const insets = useSafeAreaInsets();
   const navigateTo = (screen) => {
     if (screen == "delete") {
       console.log("delete me");
     } else if (screen == "logout") {
-      console.log("logout dude");
+      logoutAuth();
     } else {
       navigation.navigate(screen);
     }
@@ -99,7 +101,6 @@ const ProfileCard = () => {
 };
 
 const MenuBar = ({ item, navigateTo }) => {
-  console.log(item);
   return (
     <View style={styles.bar}>
       <Pressable

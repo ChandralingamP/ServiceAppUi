@@ -6,7 +6,7 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalContext";
 const SingleServiceScreen = ({ navigation, route }) => {
@@ -95,7 +95,7 @@ const ServiceCard = ({ service, addToCart, flag }) => {
             alignItems: "center",
           }}
         >
-          <ButtonCard flag={flag} service={service} addToCart={addToCart} />
+          {flag ? <ButtonCard flag={true} service={service} addToCart={addToCart} /> : <ButtonCard flag={true} service={service} addToCart={addToCart} />}
         </View>
       </View>
       <View style={{ width: "33%" }}>
@@ -109,7 +109,6 @@ const ServiceCard = ({ service, addToCart, flag }) => {
 };
 
 const ButtonCard = ({ service, flag, addToCart }) => {
-  console.log(flag);
   if (flag == true) {
     return (
       <Pressable
