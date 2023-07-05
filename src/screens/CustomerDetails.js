@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, View, Button, Alert } from "react-native";
 import { useGlobalContext } from "../context/GlobalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function CustomerDetails({ navigation }) {
-  const { updateCustomerDetails } = useGlobalContext();
+  const { updateCustomerDetails,verifyPassword } = useGlobalContext();
   const [customerName, setCustomerName] = useState("");
   const [customerPassword, setCustomerPassword] = useState("");
   const [customerDupPassword, setCustomerDupPassword] = useState("");
@@ -25,25 +25,7 @@ export default function CustomerDetails({ navigation }) {
     var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
   }
-  const verifyPassword = (password) => {
-    if (password.length < 8 || password.length > 15) {
-      Alert.alert("password length must be 8 to 15 character");
-      return false;
-    }
-    if (!/[A-Z]/.test(password)) {
-      Alert.alert("password contains at least one uppercase letter");
-      return false;
-    }
-    if (!/[a-z]/.test(password)) {
-      Alert.alert("password contains at least one lowercase letter");
-      return false;
-    }
-    if (!/\d/.test(password)) {
-      Alert.alert("password contains at least one digit");
-      return false;
-    }
-    return true;
-  };
+  
 
   const onSubmit = async () => {
     if (customerName.length <= 4) {

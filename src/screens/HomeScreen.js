@@ -2,6 +2,8 @@ import { StyleSheet, Text, TextInput, View, ScrollView } from "react-native";
 import { ServiceCard } from "../components/ServiceCard";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { services } from "../utils/Services";
+import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function HomeScreen({ navigation }) {
   const NavTo = (type) => {
     navigation.navigate("ServiceStack", {
@@ -9,7 +11,18 @@ export default function HomeScreen({ navigation }) {
       params: { category: type },
     });
   };
+  const [AddressLine1, setAddressLine1] = useState(null);
+  const [AddressLine2, setAddressLine2] = useState(null);
   const insets = useSafeAreaInsets();
+  const initialize = async () => {
+    const data = JSON.parse(await AsyncStorage.getItem('userData'));
+    console.log(data);
+    setAddressLine1(data.customerAddressLine1)
+    setAddressLine2(data.customerAddressLine2)
+  }
+  useEffect(() => {
+    initialize();
+  }, [])
   return (
     <View
       style={{
@@ -18,7 +31,7 @@ export default function HomeScreen({ navigation }) {
         marginTop: insets.top,
         marginBottom: insets.bottom,
         marginLeft: insets.left,
-        marginRight: insets.right, 
+        marginRight: insets.right,
         paddingHorizontal: "3%",
       }}
     >
@@ -29,9 +42,9 @@ export default function HomeScreen({ navigation }) {
           fontWeight: "700",
         }}
       >
-        Address Line 1
+        {AddressLine1}
       </Text>
-      <Text style={{ marginTop: 1, fontSize: 13 }}>Address Line 2</Text>
+      <Text style={{ marginTop: 1, fontSize: 13 }}>{AddressLine2}</Text>
       <TextInput style={styles.input} placeholder="type to search"></TextInput>
       <ScrollView>
         <Text style={{ fontSize: 28, marginTop: 5, fontWeight: "bold" }}>

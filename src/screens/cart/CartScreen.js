@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { get, remove } from "../../services/WebServices";
 import { useGlobalContext } from "../../context/GlobalContext";
 const CartScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
@@ -29,7 +28,7 @@ const CartScreen = ({ navigation }) => {
                 </View>
                 <ScrollView style={{ marginTop: 2 }}>
                     {cartData?.map((item, key) => {
-                        return <CartItem key={key} item={item} removeItem={removeItem} navigateToCheckOut={navigateToCheckOut} />
+                        return <CartItem key={key} item={item} removeItem={removeItem} navigateToCheckOut={navigateToCheckOut} navigation={navigation} />
                     })}
                 </ScrollView>
             </View>
@@ -49,7 +48,7 @@ const CartScreen = ({ navigation }) => {
 };
 
 
-const CartItem = ({ navigateToCheckOut, item, removeItem }) => {
+const CartItem = ({ navigateToCheckOut, item, removeItem, navigation }) => {
     return (
         <View style={{ backgroundColor: 'gray', marginTop: 8, padding: 10, borderRadius: 10, height: 150, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <View style={{ height: 100, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -66,7 +65,7 @@ const CartItem = ({ navigateToCheckOut, item, removeItem }) => {
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Pressable onPress={() => removeItem(item.cartId)} style={{ width: '48.5%', borderRadius: 3, alignItems: 'center', backgroundColor: 'white', padding: 6 }}><Text>Remove</Text></Pressable>
-                <Pressable onPress={() => navigateToCheckOut()} style={{ width: '48.5%', borderRadius: 3, alignItems: 'center', backgroundColor: 'white', padding: 6 }}><Text>Check Out</Text></Pressable>
+                <Pressable onPress={() => navigation.navigate('CheckOutScreen',{service :item })} style={{ width: '48.5%', borderRadius: 3, alignItems: 'center', backgroundColor: 'white', padding: 6 }}><Text>Check Out</Text></Pressable>
             </View>
         </View>
     )

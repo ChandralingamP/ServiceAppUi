@@ -15,7 +15,6 @@ const SingleServiceScreen = ({ navigation, route }) => {
     SSSFlag,
     getServiceData,
     setSSSFlag,
-    serviceInCartFlag,
     addToCart } = useGlobalContext();
   const [serviceId, setServiceId] = useState("AC");
   const cat = route?.params?.serviceId;
@@ -33,8 +32,6 @@ const SingleServiceScreen = ({ navigation, route }) => {
       setServiceId(route?.serviceId);
     }
   }, [serviceId, cat]);
-
-
   if (SSSFlag) {
     return (
       <View
@@ -49,7 +46,7 @@ const SingleServiceScreen = ({ navigation, route }) => {
         }}
       >
         <ScrollView>
-          <ServiceCard flag={serviceInCartFlag} service={serviceData?.service} addToCart={addToCart} />
+          <ServiceCard service={serviceData?.service} addToCart={addToCart} />
           <Text style={{ fontSize: 25, fontWeight: "bold", paddingLeft: 10 }}>
             Related Service
           </Text>
@@ -75,17 +72,20 @@ const SingleServiceScreen = ({ navigation, route }) => {
     );
   }
 };
-const ServiceCard = ({ service, addToCart, flag }) => {
+
+
+const ServiceCard = ({ service, addToCart }) => {
+  
   return (
     <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
       <View style={{ width: "67%" }}>
-        <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+        <Text style={{ fontSize: 25, fontWeight: "bold" }} numberOfLines={1} ellipsizeMode="tail">
           {service.serviceCategory}
         </Text>
         <Text style={{ fontSize: 20 }}>₹{service.servicePrice}</Text>
         {/* <Text style={styles.Text1}>₹Price</Text> */}
-        <Text style={{ width: "99%", fontSize: 12 }}>
-          {service.serviceDescription.slice(0, 95)}...
+        <Text style={{paddingRight:4}} numberOfLines={2} ellipsizeMode="tail">
+          {service.serviceDescription}
         </Text>
         <View
           style={{
@@ -95,7 +95,8 @@ const ServiceCard = ({ service, addToCart, flag }) => {
             alignItems: "center",
           }}
         >
-          {flag ? <ButtonCard flag={true} service={service} addToCart={addToCart} /> : <ButtonCard flag={true} service={service} addToCart={addToCart} />}
+          <ButtonCard service={service} addToCart={addToCart} /> 
+          {/* {serviceInCartFlag == true ? <ButtonCard flag={true} service={service} addToCart={addToCart} /> : <ButtonCard flag={false} service={service} addToCart={addToCart} />} */}
         </View>
       </View>
       <View style={{ width: "33%" }}>
@@ -109,7 +110,9 @@ const ServiceCard = ({ service, addToCart, flag }) => {
 };
 
 const ButtonCard = ({ service, flag, addToCart }) => {
-  if (flag == true) {
+  const {serviceInCartFlag} = useGlobalContext();
+  console.log(serviceInCartFlag,"button");
+  if (serviceInCartFlag == true) {
     return (
       <Pressable
         style={{
@@ -214,7 +217,6 @@ const styles = StyleSheet.create({
     padding: 19,
     flexDirection: "row",
     flexWrap: "wrap",
-    // height:50
   },
   Text1: {
     textDecorationLine: "line-through",

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const root_url = "http://192.168.231.64:5000/";
+// const root_url = "http://192.168.231.64:5000/";
+const root_url = "http://192.168.8.64:5000/";
 
 export async function get(url) {
   return await axios
@@ -8,14 +9,15 @@ export async function get(url) {
     .then((data) => data.data)
     .then((data) => {
       return data;
-
     })
     .catch((err) => {
       return err;
     });
 }
-export function post(url, body) {
-  return axios
+
+
+export async function post(url, body) {
+  return await axios
     .post(root_url + url, body)
     .then((data) => data.data)
     .then((data) => {
@@ -25,8 +27,10 @@ export function post(url, body) {
       return err;
     });
 }
-export function put(url, body) {
-  return axios
+
+
+export async function put(url, body) {
+  return await axios
     .put(root_url + url, body)
     .then((data) => data.data)
     .then((data) => {
@@ -38,8 +42,10 @@ export function put(url, body) {
       }
     });
 }
-export function remove(url) {
-  return axios
+
+
+export async function remove(url) {
+  return await axios
     .delete(root_url + url)
     .then((data) => data.data)
     .then((data) => {

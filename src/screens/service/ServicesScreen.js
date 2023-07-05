@@ -23,6 +23,7 @@ export default function ServiceScreen({ navigation }) {
   const { getAllServiceData, serviceData, tester } = useGlobalContext();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    console.log(serviceData,"c");
     if (serviceData) {
       setIsLoading(true);
     } else {

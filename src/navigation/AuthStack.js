@@ -7,6 +7,7 @@ import CustomerDetails from "../screens/CustomerDetails";
 import LandingStack from "./LandingStack";
 import LoginScreen from "../screens/LoginScreen";
 import ForgotPassword from "../screens/ForgotPassword";
+import PasswordUpdateScreen from "../screens/PasswordUpdateScreen";
 const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
@@ -18,6 +19,7 @@ const AuthStack = () => {
       <Stack.Screen name="CustomerDetails" component={CustomerDetails} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="LandingStack" component={LandingStack} />
+      <Stack.Screen name="PasswordUpdateScreen" component={PasswordUpdateScreen} />
     </Stack.Navigator>
   );
 };

@@ -12,6 +12,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useServiceContext } from "../../context/ServiceContext";
 import { useGlobalContext } from "../../context/GlobalContext";
+import { useEffect,useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function ProfileScreen({ navigation }) {
   const { logoutAuth } = useGlobalContext();
   const { hi } = useServiceContext;
@@ -44,7 +46,7 @@ export default function ProfileScreen({ navigation }) {
           marginBottom: 2,
         }}
       >
-        Profile {hi} gyu
+        Profile
       </Text>
       <ProfileCard />
       <View
@@ -76,17 +78,29 @@ export default function ProfileScreen({ navigation }) {
 }
 
 const ProfileCard = () => {
+  const [mail,setMail] = useState("");
+  const [phoneNumber,setPhoneNumber] = useState("");
+  const [name,setName] = useState("");
+  const initialize = async () => {
+    const data = JSON.parse(await AsyncStorage.getItem('userData'));
+    setMail(data.customerEmail);
+    setPhoneNumber(data.customerPhoneNumber);
+    setName(data.customerName); 
+  }
+  useEffect(() => {
+    initialize();
+  }, [])
   return (
     <View style={styles.main}>
       <View style={styles.main1}>
         <Text style={{ fontSize: 25, fontWeight: 600, color: "white" }}>
-          Chandralingam
+          {name}
         </Text>
         <Text style={{ fontSize: 13, fontWeight: 500, color: "white" }}>
-          9874563210
+          {phoneNumber}
         </Text>
         <Text style={{ fontSize: 13, fontWeight: 500, color: "white" }}>
-          Emailid@gmail.com
+          {mail}
         </Text>
       </View>
       <View style={styles.main2}>
