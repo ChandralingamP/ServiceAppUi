@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { saveData} from "./Storage";
+import { saveData } from "./Storage";
 import { get, post, remove, put } from "../services/WebServices";
 
 const GlobalContext = createContext();
@@ -39,7 +39,7 @@ export const GlobalProvider = ({ children }) => {
           `login/${customerPhoneNumber}/${customerPassword}`
         );
         if (data.msg) {
-          saveData('userData',JSON.stringify(data.customerDetails));
+          saveData('userData', JSON.stringify(data.customerDetails));
           if (data?.admin) {
             AsyncStorage.setItem('admin', 'true');
             setIsAdmin(true);
@@ -189,7 +189,7 @@ export const GlobalProvider = ({ children }) => {
         console.log("false");
         setServiceInCartFlag(false);
       }
-      
+
       setServiceData(data);
       setSSSFlag(true);
     } catch (err) {
@@ -227,6 +227,49 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
+  // available providers 
+  const [availableProviderData, setAvailableProviderData] = useState([]);
+  const getAvailableProviders = async () => {
+    const data = await get('providers/available');
+    console.log(data);
+    setAvailableProviderData(data)
+  }
+  const updateAvailableProviderData = (id) => {
+    const newData = availableProviderData?.filter((item) => item.providerId != id);
+    updateAssignedProviderData(id);
+    setAvailableProviderData(newData);
+  }
+
+  // pending providers 
+  const [assignedProviderData, setAssignedProviderData] = useState([]);
+  const getAssignedProviders = async () => {
+    const data = await get('providers/assigned');
+    setAssignedProviderData(data);
+  }
+  const updateAssignedProviderData = (id) => {
+    const newData = availableProviderData?.filter((item) => item.providerId == id);
+    setAvailableProviderData([...assignedProviderData, newData]);
+  }
+  const filterAssignedProviderData = (id) => {
+    const newData = availableProviderData?.filter((item) => item.providerId != id);
+    updateActiveProviderData(id);
+    setAvailableProviderData(newData);
+  }
+  // active providers 
+  const [activeProviderData, setActiveProviderData] = useState(null);
+  const getActiveProviders = async () => {
+    const data = await get('providers/active');
+    setActiveProviderData(data)
+  }
+  const updateActiveProviderData = (id) => {
+    const newData = AssignedProviderData?.filter((item) => item.orderId == id);
+    setActiveProviderData([...activeProviderData, newData]);
+  }
+
+  const filterActiveProviderData = (id) => {
+    const newData = availableProviderData?.filter((item) => item.orderId != id);
+    setActiveProviderData(newData);
+  }
   return (
     <GlobalContext.Provider
       value={{
@@ -259,7 +302,22 @@ export const GlobalProvider = ({ children }) => {
         serviceInCartFlag,
         setServiceInCartFlag,
         addToCart,
-        updateAdminPassword
+        updateAdminPassword,
+        // available orders
+        availableProviderData,
+        setAvailableProviderData,
+        getAvailableProviders,
+        updateAvailableProviderData,
+        //assigned orders
+        assignedProviderData,
+        setAssignedProviderData,
+        getAssignedProviders,
+        filterAssignedProviderData,
+        //pending orders
+        activeProviderData,
+        setActiveProviderData,
+        getActiveProviders,
+        filterActiveProviderData
       }}
     >
       {children}
